@@ -20,5 +20,4 @@ These are used as parameters and return values for all Delegate C++ functions an
 Delegate C++ does not inherit from, but is based heavily off of the <std::vector> type.
 At its base, Delegate C++ uses an <std::vector> of <std::function> to store its data.
 
-When creating DelFunction(s), remember that they are typedef's of <std::vector>. 
-You can assign them the same way you would assign an std::vector.
+You can assign DelFunctions(s) them the same way you would assign an std::vector.
