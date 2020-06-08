@@ -2,23 +2,38 @@
 
 Delegate C++ is a single header, lightweight and easy to use abstraction for storing callbacks.
 
-# Using Delegate C++
-
-You can use delegate C++ by creating an instance of Delegate, adding in your functions, and calling Invoke();
-
 # Important Information
 
-You can find a basic example of Delegate C++ in example.cpp
+1. You can find a basic example of Delegate C++ below in the Usage Example section, or in the comments of Delegate.h
+2. Delegate C++ makes heavy use of the <std::vector> type.
+3. Delegate C++ uses std::function to store functions.
 
-Delegate C++ uses 2 types to store functions. 
+# Using Delegate C++
 
-1. DelFunctions - A reference to multiple functions.
-2. DelFunction - A reference to a single function.
+``` C++
 
-These are used as parameters and return values for all Delegate C++ functions and systems, so make sure you use these.
+#include <iostream>
+#include "delegate.h"
 
-Delegate C++ does not inherit from, but is based heavily off of the <std::vector> type.
-At its base, Delegate C++ uses an <std::vector> of <std::function> to store its data.
+//Any function
+void YourFunction() { std::cout << "Your Function Was Invoked!" << std::endl; }
+void YourFunction2() { std::cout << "Your Function 2 Was Invoked!" << std::endl; }
 
-When creating DelFunction(s), remember that they are typedef's of <std::vector>. 
-You can assign them the same way you would assign an std::vector.
+int main()
+{
+	//Create a delegate
+	Delegate _delegate;
+
+	_delegate += YourFunction;
+	_delegate += YourFunction2; 
+  
+	//Invoke functions added to the delegate.
+	_delegate();
+}
+
+/*
+	OUTPUT:
+	Your Function Was Invoked!
+	Your Function 2 Was Invoked!
+*/
+```
