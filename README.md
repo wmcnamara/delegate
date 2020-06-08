@@ -15,14 +15,13 @@ void YourFunction2() { std::cout << "Your Function 2 Was Invoked!" << std::endl;
 
 int main()
 {
-	//Create a delegate
-	Delegate _delegate;
+	Delegate _delegate; 	//Create a delegate
 
-	_delegate += YourFunction;
+	//Add your functions
+	_delegate += YourFunction; 
 	_delegate += YourFunction2; 
   
-	//Invoke functions added to the delegate.
-	_delegate();
+	_delegate(); //Invoke functions added to the delegate.
 	
 	//Your Function Was Invoked!
 	//Your Function 2 Was Invoked!
