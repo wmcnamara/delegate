@@ -23,11 +23,8 @@ int main()
   
 	//Invoke functions added to the delegate.
 	_delegate();
+	
+	//Your Function Was Invoked!
+	//Your Function 2 Was Invoked!
 }
-
-/*
-	OUTPUT:
-	Your Function Was Invoked!
-	Your Function 2 Was Invoked!
-*/
 ```
