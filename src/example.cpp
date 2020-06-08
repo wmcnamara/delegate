@@ -21,7 +21,6 @@ int main()
 	//Assign them to del. You can use a constructor for this aswell.
 	Delegate del = functions;
 
-	
 	//Invoke them.
 	del();
 }

@@ -6,10 +6,10 @@
 #include <exception>
 
 //Weston McNamara 2020, Made With Love In Canada
-//Licensed Under MIT
-
+//Licensed Under MIT https://mit-license.org/
+ 
 //Delegate C++ is a single header, lightweight and easy to use abstraction for storing functions and callbacks.
-//Delegate C++ currently cannot accept any functions with parameters.
+//Delegate C++ currently cannot accept any functions with parameters. This is subject to change.
 
 /*
 	You can use delegate C++ by creating an instance of Delegate, adding in your functions, and calling Invoke();

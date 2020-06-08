@@ -1,14 +1,14 @@
 # Delegate C++
 
-Delegate C++ is a single header, lightweight and easy to use abstraction for storing simple callbacks.
+Delegate C++ is a single header, lightweight and easy to use abstraction for storing callbacks.
 
 # Using Delegate C++
 
 You can use delegate C++ by creating an instance of Delegate, adding in your functions, and calling Invoke();
 
-You can find an simple example in example.cpp
-
 # Important Information
+
+You can find a basic example of Delegate C++ in example.cpp
 
 Delegate C++ uses 2 types to store functions. 
 
