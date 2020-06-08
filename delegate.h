@@ -11,45 +11,11 @@
  
 //Delegate C++ is a single header, lightweight and easy to use abstraction for storing functions and callbacks.
 //Delegate C++ currently cannot accept any functions with parameters. This is subject to change.
-
-	EXAMPLE:
-	
-	#include <iostream>
-	#include "delegate.h"
-
-	//Any function
-	void YourFunction() { std::cout << "Your Function Was Invoked!" << std::endl; }
-	void YourFunction2() { std::cout << "Your Function 2 Was Invoked!" << std::endl; }
-
-	int main()
-	{
-		//Create a delegate
-		Delegate _delegate;
-
-		_delegate += YourFunction;
-		_delegate += YourFunction2;
-
-		//Invoke functions added to the delegate.
-		_delegate();
-	}
-
-	
-	OUTPUT:
-	Your Function Was Invoked!
-	Your Function 2 Was Invoked!
 */
+
 class Delegate
 {
 	public:
-		//Creates a delegate and initializes it with a single handler.
-		Delegate(std::function<void()> func) { m_handlers.push_back(func); }
-
-		//Copy Constructor
-		Delegate(const Delegate &delegate) : m_handlers(delegate.m_handlers) {}
-
-		//Creates a delegate with no Functions
-		Delegate() {}
-
 		//Invokes each function added to this delegate. 
 		//If no handlers exist, it throws std::runtime_error.
 		void Invoke();
