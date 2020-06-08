@@ -1,4 +1,4 @@
-# C++ Delegate
+# Delegate C++
 
 Delegate C++ is a single header, lightweight and easy to use abstraction for storing simple callbacks.
 
