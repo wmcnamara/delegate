@@ -1,8 +1,8 @@
-# Delegate
+# Delegate C++
 
-Delegate is a single header, lightweight and easy to use structure for storing functions and callbacks.
+Delegate C++ is a single header, lightweight and easy to use structure for storing functions and callbacks.
 
-# Using A Delegate
+# Using Delegate C++
 
 ``` C++
 
