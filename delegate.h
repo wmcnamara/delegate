@@ -5,7 +5,7 @@
 #include <functional>
 
 /*
-//Weston McNamara 2020, Made With Love In Canada
+//Weston McNamara 2020, Made In Canada
 //Licensed Under MIT https://mit-license.org/
 //https://github.com/westonmcnamara/delegate-cpp
  
@@ -18,7 +18,16 @@ class Delegate
 	public:
 		//Invokes each function added to this delegate. 
 		//If no handlers exist, it throws std::runtime_error.
-		void Invoke();
+		void Invoke() 
+		{
+			if (m_handlers.empty()) { throw std::runtime_error("Empty delegate cannot be invoked."); }
+
+			//Iterate through the vector, and invoke each function.
+			for (int i = 0; i != m_handlers.size(); i++)
+			{
+				m_handlers[i]();
+			}
+		}
 
 		//Adds a single DelFunction to the delegate.
 		void AddHandler(std::function<void()> func) { m_handlers.push_back(func); }
@@ -33,18 +42,6 @@ class Delegate
 		void operator+= (std::function<void()> func) { AddHandler(func); }
 
 	private:
-		//This is where handlers/functions are stored.
 		std::vector<std::function<void()>> m_handlers;
 };
-
-void Delegate::Invoke()
-{
-	if (m_handlers.empty()) { throw std::runtime_error("Empty delegate cannot be invoked."); }
-
-	//Iterate through the vector, and invoke each function.
-	for (int i = 0; i != m_handlers.size(); i++)
-	{
-		m_handlers[i]();
-	}
-}
 #endif
