@@ -17,6 +17,7 @@ Example: Connection conn = delegate.AddHandler(func);
 
 To remove func from being called, you must call:
 delegate.RemoveHandler(conn);
+With the connection object.
 
 You CANNOT do this:
 delegate.RemoveHandler(func);
