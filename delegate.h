@@ -5,41 +5,67 @@
 #include <functional>
 
 /*
-//Weston McNamara 2020, Made In Canada
+//Weston McNamara 2020
 //Licensed Under MIT https://mit-license.org/
 //https://github.com/westonmcnamara/delegate-cpp
  
 //Delegate C++ is a single header, lightweight and easy to use abstraction for storing functions and callbacks.
 //Delegate C++ currently cannot accept any functions with parameters. This is subject to change.
+
+//AddHandler functions return a Connection object. When you add a Handler, if you plan on removing it keep track of this object.
+Example: Connection conn = delegate.AddHandler(func);
+
+To remove func from being called, you must call:
+delegate.RemoveHandler(conn);
+
+You CANNOT do this:
+delegate.RemoveHandler(func);
 */
+
+class Connection
+{
+public:
+	Connection(int index) : m_index(index) {}
+	int Index() const { return m_index; }
+private:
+	int m_index;
+};
 
 class Delegate
 {
-	public:
+	public:       
 		//Invokes each function added to this delegate. 
 		//If no handlers exist, it throws std::runtime_error.
 		void Invoke() 
 		{
 			if (m_handlers.empty()) { throw std::runtime_error("Empty delegate cannot be invoked."); }
-
-			//Iterate through the vector, and invoke each function.
-			for (int i = 0; i != m_handlers.size(); i++)
+			
+			for (auto handler : m_handlers) 
 			{
-				m_handlers[i]();
+				handler();
 			}
 		}
 
-		//Adds a single DelFunction to the delegate.
-		void AddHandler(std::function<void()> func) { m_handlers.push_back(func); }
+		//Adds a single function to the delegate.
+		Connection&& AddHandler(std::function<void()> func)
+		{
+			//The new function was just added, size will be the position of it.
+			m_handlers.push_back(func); 
 
-		//Removes every function added to this delegate.
+			//Size does not take the index into account, so we subtract one to give the index.
+			return Connection(m_handlers.size() - 1); 
+		}
+
+		//Removes a single function from the delegate
+		void RemoveHandler(Connection& conn) 
+		{
+			m_handlers.erase(m_handlers.begin() + conn.Index());
+		}
+
 		void RemoveAllHandlers() { m_handlers.clear(); }
 
 		//Invokes each handler added to this delegate.
 		void operator() () { Invoke(); }
-
-		//Adds a function to the delegate.
-		void operator+= (std::function<void()> func) { AddHandler(func); }
 
 	private:
 		std::vector<std::function<void()>> m_handlers;
