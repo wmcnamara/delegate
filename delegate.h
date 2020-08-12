@@ -9,8 +9,8 @@
 //Licensed Under MIT https://mit-license.org/
 //https://github.com/westonmcnamara/delegate-cpp
  
-//Delegate C++ is a single header, lightweight and easy to use abstraction for storing functions and callbacks.
-//Delegate C++ currently cannot accept any functions with parameters. This is subject to change.
+//Delegate is a single header, lightweight and easy to use abstraction for storing functions and callbacks.
+//Delegate currently cannot accept any functions with parameters. This is subject to change.
 */
 
 class Connection
