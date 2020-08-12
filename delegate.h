@@ -11,16 +11,6 @@
  
 //Delegate C++ is a single header, lightweight and easy to use abstraction for storing functions and callbacks.
 //Delegate C++ currently cannot accept any functions with parameters. This is subject to change.
-
-//AddHandler functions return a Connection object. When you add a Handler, if you plan on removing it keep track of this object.
-Example: Connection conn = delegate.AddHandler(func);
-
-To remove func from being called, you must call:
-delegate.RemoveHandler(conn);
-With the connection object.
-
-You CANNOT do this:
-delegate.RemoveHandler(func);
 */
 
 class Connection
@@ -29,22 +19,23 @@ public:
 	Connection(int index) : m_index(index) {}
 	int Index() const { return m_index; }
 private:
-	int m_index;
+	const int m_index;
 };
 
 class Delegate
 {
 	public:       
 		//Invokes each function added to this delegate. 
-		//If no handlers exist, it throws std::runtime_error.
-		void Invoke() 
+		//If no handlers exist, it returns false.
+		bool Invoke() 
 		{
-			if (m_handlers.empty()) { throw std::runtime_error("Empty delegate cannot be invoked."); }
+			if (m_handlers.empty()) { return false; }
 			
 			for (auto handler : m_handlers) 
 			{
 				handler();
 			}
+			return true;
 		}
 
 		//Adds a single function to the delegate.
