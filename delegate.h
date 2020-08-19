@@ -11,16 +11,19 @@
 //https://github.com/wmcnamara/delegate
  
 //Delegate is a single header, lightweight and easy to use abstraction for storing functions and callbacks.
+//When you call AddHandler, a connection type is returned. To call RemoveHandler, you must pass this connection object.
+//If you know you might delete the handler you add, be sure to keep track of this object.
 */
+
 namespace Events 
 {
 	class Connection
 	{
-	public:
-		Connection(int index) : m_index(index) {}
-		int Index() const { return m_index; }
-	private:
-		const int m_index;
+		public:
+			Connection(int index) : m_index(index) {}
+			int Index() const { return m_index; }
+		private:
+			const int m_index;
 	};
 
 	template<typename T>
@@ -59,6 +62,44 @@ namespace Events
 
 	private:
 		std::vector<std::function<void(T param)>> m_handlers;
+	};
+
+	template<>
+	class Delegate<void>
+	{
+	public:
+		//Invokes each function added to this delegate. 
+		//If no handlers exist, it returns false.
+		bool Invoke()
+		{
+			if (m_handlers.empty()) { return false; }
+
+			for (auto handler : m_handlers)
+			{
+				handler();
+			}
+			return true;
+		}
+
+		//Adds a single function to the delegate.
+		Connection&& AddHandler(std::function<void()> func)
+		{
+			//The new function was just added, size will be the position of it.
+			m_handlers.push_back(func);
+
+			//Size does not take the index into account, so we subtract one to give the index.
+			return Connection(m_handlers.size() - 1);
+		}
+
+		//Removes a single function from the delegate
+		void RemoveHandler(Connection& conn) { m_handlers.erase(m_handlers.begin() + conn.Index()); }
+		void RemoveAllHandlers() { m_handlers.clear(); }
+
+		//Invokes each handler added to this delegate.
+		void operator() () { Invoke(); }
+
+	private:
+		std::vector<std::function<void()>> m_handlers;
 	};
 }
 #endif
