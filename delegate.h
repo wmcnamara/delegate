@@ -49,14 +49,11 @@ namespace Events
 		}
 
 		//Removes a single function from the delegate
-		void RemoveHandler(int ID) {
+		void RemoveHandler(int ID) 
+		{
 			m_handlers.erase(ID);
 		}
-		void RemoveAllHandlers() { m_handlers.clear(); }
-
-		//Invokes each handler added to this delegate.
-		void operator() (T param) { Invoke(param); }
-
+		void RemoveAllHandlers() { m_handlers.clear();
 	private:		
 		std::map<int, function> m_handlers;
 		int m_NextID = 0; //Next ID to be used.
