@@ -18,7 +18,7 @@ int main()
 {
 	//Create a delegate. 
 	//This delegate will take a function that has parameter of type int.
-	Events::Delegate<int> _delegate; 
+	Delegate<int> _delegate; 
 
 	//Add your functions.
 	//AddHandler returns an ID you can use to remove this function. If you want to remove this handler, you need this number.
