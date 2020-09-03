@@ -17,7 +17,8 @@ void YourFunction1(int i) { std::cout << "Function was invoked with: " << i << s
 int main()
 {
 	//Create a delegate. 
-	//This delegate will take a function that has parameter of type int.
+	//This delegate will take a function that has parameter of type int. 
+	//Delegate supports variadic templates, so you can have as many params as you wish.
 	Delegate<int> _delegate; 
 
 	//Add your functions.
