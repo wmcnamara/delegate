@@ -22,7 +22,8 @@ int main()
 	Delegate<int> _delegate; 
 
 	//Add your functions.
-	//AddHandler returns an ID you can use to remove this function. If you want to remove this handler, you need this number.
+	//AddHandler returns an ID you can use to remove this function. 
+	//If you want to remove this handler, you need this number.
 	
 	int ID = _delegate.AddHandler(YourFunction1); //You can now use RemoveHandler(ID) to remove this.
 	
