@@ -12,60 +12,93 @@
 #ifndef DELEGATE_INCLUDE
 #define DELEGATE_INCLUDE
 
-#ifndef DELEGATE_API
-#define DELEGATE_API //__declspec(dllexport)
-#endif
-
-#ifndef DELEGATE_NOEXCEPT
-#define DELEGATE_NOEXCEPT noexcept //You can omit 'noexcept' here to allow for throwing exceptions.
-#endif
-
 #include <functional>
 #include <map>
 
-template<typename T>
+template<typename ... T>
 class Delegate
 {
 private:
-	typedef std::function<void(T)> Func_T;
-	
+	typedef std::function<void(T...)> Func_T;
 public:
 	//Invokes each function added to this delegate. 
-	DELEGATE_API void Invoke(T param) DELEGATE_NOEXCEPT
+	void Invoke(T... param)
 	{
 		if (m_handlers.empty())
 			return;
 
 		for (const auto& key : m_handlers)
 		{
-			key.second(param); //Invoke the function
-		}		
+			key.second(param...); //Invoke the function
+		}
 	}
 
 	//Adds a single function to the delegate.
-	DELEGATE_API int AddHandler(Func_T func) DELEGATE_NOEXCEPT
+	int AddHandler(Func_T func)
 	{
 		static int nextID = 0;
-
 		m_handlers.insert(std::pair<int, Func_T>(nextID, func));
 
 		//Return the ID, and increment it.
-		return (nextID++);
+		return nextID++;
 	}
 
 	//Removes a single function from the delegate
-	DELEGATE_API void RemoveHandler(int ID) DELEGATE_NOEXCEPT
+	void RemoveHandler(int ID)
 	{
 		m_handlers.erase(ID);
 	}
-	
-	//Removes every handler from this delegate.
-	DELEGATE_API void RemoveAllHandlers() DELEGATE_NOEXCEPT
+
+	void RemoveAllHandlers()
 	{
 		m_handlers.clear();
 	}
+
 private:
-    std::map<int, Func_T> m_handlers;
+	std::map<int, Func_T> m_handlers;
 };
 
+//Template specialization for no parameter
+template<>
+class Event<void>
+{
+private:
+	typedef std::function<void()> Func_T;
+public:
+	//Invokes each function added to this delegate. 
+	void Invoke()
+	{
+		if (m_handlers.empty())
+			return;
+
+		for (const auto& key : m_handlers)
+		{
+			key.second(); //Invoke the function
+		}
+	}
+
+	//Adds a single function to the delegate.
+	int AddHandler(Func_T func)
+	{
+		static int nextID = 0;
+		m_handlers.insert(std::pair<int, Func_T>(nextID, func));
+
+		//Return the ID, and increment it.
+		return nextID++;
+	}
+
+	//Removes a single function from the delegate
+	void RemoveHandler(int ID)
+	{
+		m_handlers.erase(ID);
+	}
+
+	void RemoveAllHandlers()
+	{
+		m_handlers.clear();
+	}
+
+private:
+	std::map<int, Func_T> m_handlers;
+};
 #endif //DELEGATE_INCLUDE
