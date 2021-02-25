@@ -7,6 +7,7 @@
 //When you call AddHandler, a integer type containing the ID is returned. To call RemoveHandler, you must pass this integer.
 //If you know you might delete the handler you add, be sure to keep track of this number.
 //Uses std::map to represent ID/Function data.
+//Removing a handler of ID 0 simply returns, and does nothing.
 */
 
 #ifndef DELEGATE_INCLUDE
@@ -36,16 +37,19 @@ public:
 	//Adds a single function to the delegate.
 	int AddHandler(Func_T func)
 	{
-		static int nextID = 0;
+		static int nextID = 1;
 		m_handlers.insert(std::pair<int, Func_T>(nextID, func));
 
 		//Return the ID, and increment it.
 		return nextID++;
 	}
 
-	//Removes a single function from the delegate
+	//Removes a single function from the delegate.
 	void RemoveHandler(int ID)
 	{
+		if (ID == 0)
+			return
+
 		m_handlers.erase(ID);
 	}
 
@@ -80,7 +84,7 @@ public:
 	//Adds a single function to the delegate.
 	int AddHandler(Func_T func)
 	{
-		static int nextID = 0;
+		static int nextID = 1;
 		m_handlers.insert(std::pair<int, Func_T>(nextID, func));
 
 		//Return the ID, and increment it.
@@ -90,6 +94,9 @@ public:
 	//Removes a single function from the delegate
 	void RemoveHandler(int ID)
 	{
+		if (ID == 0)
+			return
+
 		m_handlers.erase(ID);
 	}
 
