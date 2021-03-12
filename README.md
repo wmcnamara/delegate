@@ -4,7 +4,6 @@ Delegate is a single header, lightweight and easy to use structure for storing f
 
 There is comment documentation in the delegate.h file, but you can understand the basic use of the software with the example below.
 
-Delegate is *not* thread safe.
 # Using Delegate
 
 ``` C++
