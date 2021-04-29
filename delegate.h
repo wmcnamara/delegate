@@ -2,7 +2,6 @@
 //Weston McNamara 2020
 //Licensed Under MIT https://mit-license.org/
 //https://github.com/wmcnamara/delegate
-
 //Delegate is a single header, lightweight and easy to use abstraction for storing functions and callbacks.
 //When you call AddHandler, a integer type containing the ID is returned. To call RemoveHandler, you must pass this integer.
 //If you know you might delete the handler you add, be sure to keep track of this number.
@@ -95,7 +94,7 @@ public:
 	void RemoveHandler(int ID)
 	{
 		if (ID == 0)
-			return
+			return;
 
 		m_handlers.erase(ID);
 	}
