@@ -64,7 +64,7 @@ private:
 
 //Template specialization for no parameter
 template<>
-class Event<void>
+class Delegate<void>
 {
 private:
 	typedef std::function<void()> Func_T;
