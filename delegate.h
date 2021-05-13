@@ -12,8 +12,23 @@
 #ifndef DELEGATE_INCLUDE
 #define DELEGATE_INCLUDE
 
+#ifndef DELEGATE_SINGLETHREADED
+#define DELEGATE_MULTITHREADED
+#endif
+
 #include <functional>
 #include <map>
+#include <atomic>
+
+#ifdef DELEGATE_MULTITHREADED
+#include <mutex>
+#endif
+
+#ifdef DELEGATE_MULTITHREADED
+#define DELEGATE_ID_TYPE std::atomic_uint64_t
+#else
+#define DELEGATE_ID_TYPE std::uint64_t
+#endif
 
 template<typename ... T>
 class Delegate
@@ -27,6 +42,10 @@ public:
 		if (m_handlers.empty())
 			return;
 
+#ifdef DELEGATE_LOCK_INVOKE
+		std::lock_guard<std::mutex> guard(eventMutex);
+#endif
+
 		for (const auto& key : m_handlers)
 		{
 			key.second(param...); //Invoke the function
@@ -34,9 +53,14 @@ public:
 	}
 
 	//Adds a single function to the delegate.
-	int AddHandler(Func_T func)
+	uint64_t AddHandler(Func_T func)
 	{
-		static int nextID = 1;
+		static DELEGATE_ID_TYPE nextID = 1;
+
+#ifdef DELEGATE_MULTITHREADED
+		std::lock_guard<std::mutex> guard(eventMutex);
+#endif
+
 		m_handlers.insert(std::pair<int, Func_T>(nextID, func));
 
 		//Return the ID, and increment it.
@@ -44,21 +68,32 @@ public:
 	}
 
 	//Removes a single function from the delegate.
-	void RemoveHandler(int ID)
+	void RemoveHandler(uint64_t ID)
 	{
 		if (ID == 0)
-			return
+			return;
+
+#ifdef DELEGATE_MULTITHREADED
+		std::lock_guard<std::mutex> guard(eventMutex);
+#endif
 
 		m_handlers.erase(ID);
 	}
 
 	void RemoveAllHandlers()
 	{
+#ifdef DELEGATE_MULTITHREADED
+		std::lock_guard<std::mutex> guard(eventMutex);
+#endif
 		m_handlers.clear();
 	}
 
 private:
-	std::map<int, Func_T> m_handlers;
+	std::map<uint64_t, Func_T> m_handlers;
+
+#ifdef DELEGATE_MULTITHREADED
+	std::mutex eventMutex;
+#endif
 };
 
 //Template specialization for no parameter
@@ -74,6 +109,10 @@ public:
 		if (m_handlers.empty())
 			return;
 
+#ifdef DELEGATE_LOCK_INVOKE
+		std::lock_guard<std::mutex> guard(eventMutex);
+#endif
+
 		for (const auto& key : m_handlers)
 		{
 			key.second(); //Invoke the function
@@ -81,9 +120,14 @@ public:
 	}
 
 	//Adds a single function to the delegate.
-	int AddHandler(Func_T func)
+	uint64_t AddHandler(Func_T func)
 	{
-		static int nextID = 1;
+		static DELEGATE_ID_TYPE nextID = 1;
+
+#ifdef DELEGATE_MULTITHREADED
+		std::lock_guard<std::mutex> guard(eventMutex);
+#endif
+
 		m_handlers.insert(std::pair<int, Func_T>(nextID, func));
 
 		//Return the ID, and increment it.
@@ -96,15 +140,28 @@ public:
 		if (ID == 0)
 			return;
 
+#ifdef DELEGATE_MULTITHREADED
+		std::lock_guard<std::mutex> guard(eventMutex);
+#endif
+
 		m_handlers.erase(ID);
 	}
 
 	void RemoveAllHandlers()
 	{
+
+#ifdef DELEGATE_MULTITHREADED
+		std::lock_guard<std::mutex> guard(eventMutex);
+#endif
+
 		m_handlers.clear();
 	}
 
 private:
 	std::map<int, Func_T> m_handlers;
+
+#ifdef DELEGATE_MULTITHREADED
+	std::mutex eventMutex;
+#endif
 };
 #endif //DELEGATE_INCLUDE

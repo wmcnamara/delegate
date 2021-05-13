@@ -1,6 +1,6 @@
 # Delegate
 
-Delegate is a single header, lightweight and easy to use structure for storing functions and callbacks.
+Delegate is a single header, thread safe, lightweight and easy to use structure for storing functions and callbacks.
 
 There is comment documentation in the delegate.h file, but you can understand the basic use of the software with the example below.
 
@@ -43,3 +43,22 @@ int main()
 	_delegate.RemoveHandler(ID); //YourFunction1 will no longer run.
 }
 ```
+
+# Configuring Delegate
+By default, delegate is completely thread safe (with one slight exception discussed below), and automatically performs appropriate locking on thread sensitive functions.
+
+However, locking introduces a slight performance hit. If you are in a single threaded environment, and wish to disable multithreaded locking, you can do so
+by defining the `DELEGATE_SINGLETHREADED` macro before including delegate.h.
+
+## Please Note
+
+**Delegate::Invoke() does not perform any thread locking by default.**
+
+Any function you add as a handler is responsible for preventing data races. Delegate provides no assurance that Invoke() will not be called
+simultaniously from 2 seperate threads.
+
+This is for performance reasons, considering that Invoke() may be called extremely often.
+
+#### Enabling Invoke locking
+If you cannot make all of the handlers thread safe, and/or are willing to take the small performance hit, you can enable 
+locking on the Invoke() function by defining the `DELEGATE_LOCK_INVOKE` macro.
