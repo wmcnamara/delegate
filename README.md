@@ -59,6 +59,5 @@ simultaniously from 2 seperate threads.
 
 This is for performance reasons, considering that Invoke() may be called extremely often.
 
-#### Enabling Invoke locking
 If you cannot make all of the handlers thread safe, and/or are willing to take the small performance hit, you can enable 
 locking on the Invoke() function by defining the `DELEGATE_LOCK_INVOKE` macro.
