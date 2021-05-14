@@ -3,10 +3,15 @@
 //Licensed Under MIT https://mit-license.org/
 //https://github.com/wmcnamara/delegate
 //Delegate is a single header, lightweight and easy to use abstraction for storing functions and callbacks.
+
 //When you call AddHandler, a integer type containing the ID is returned. To call RemoveHandler, you must pass this integer.
 //If you know you might delete the handler you add, be sure to keep track of this number.
 //Uses std::map to represent ID/Function data.
-//Removing a handler of ID 0 simply returns, and does nothing.
+//Removing a handler of ID 0 is a no op, and will do nothing.
+
+//You can toggle thread locking off if you're in a single threaded environment by defining DELEGATE_SINGLETHREADED.
+//Invoke is not a thread safe function by default for performance reasons. It is recommended that any handler you add to a delegate has no data races.
+//If you cannot assure this though, you can make Invoke() thread safe by defining DELEGATE_LOCK_INVOKE for a small performance cost.
 */
 
 #ifndef DELEGATE_INCLUDE
@@ -18,10 +23,10 @@
 
 #include <functional>
 #include <map>
-#include <atomic>
 
 #ifdef DELEGATE_MULTITHREADED
 #include <mutex>
+#include <atomic>
 #endif
 
 #ifdef DELEGATE_MULTITHREADED
