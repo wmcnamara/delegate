@@ -12,37 +12,41 @@ There is comment documentation in the delegate.h file, but you can understand th
 #include "delegate.h"
 
 //Any function
-void YourFunction1(int i) { std::cout << "Function was invoked with: " << i << std::endl; }
+void YourFunction1(int i) { std::cout << "Function was invoked with: " << i << '\n'; }
 
 int main()
 {
-	//Create a delegate. 
 	//This delegate will take a function that has parameter of type int. 
-	//Delegate supports variadic templates, so you can have as many params as you wish.
-	Delegate<int> _delegate; 
+	Delegate<int> del; 
 
-	//Add your functions.
-	//AddHandler returns an ID you can use to remove this function. 
-	//If you want to remove this handler, you need this number.
-	
-	int ID = _delegate.AddHandler(YourFunction1); //You can now use RemoveHandler(ID) to remove this.
-	
-	_delegate.AddHandler([](int i) //Lambdas work too!
-	{ 
-		std::cout << "Lambda Function Was Invoked with: " << i << std::endl;
-	});
+	int ID = del.AddHandler(YourFunction1); //You can now use RemoveHandler(ID) to remove this.
   
-	_delegate.Invoke(5); //Invoke functions added to the delegate.
+	del.Invoke(5); //Invoke functions added to the delegate.
 	
 	/* 
 	OUTPUT:
-	Your Function Was Invoked with 5!
-	Lambda Function Was Invoked with 5!
+	Function Was Invoked with 5!
 	*/
 	
 	_delegate.RemoveHandler(ID); //YourFunction1 will no longer run.
 }
 ```
+# Notes
+- You can add as many parameters as you want to an event. Delegate supports variadic templates!
+```cpp
+Delegate<int, int, float, bool> del;
+```
+- Dont need a parameter for an event? Use the `void` specialization!
+```cpp
+Delegate<void> del; //no parameter
+```
+### Remember
+`AddHandler()` returns an ID you need to use to remove a function.
+
+If you know you'll need to remove a handler, it is recommended you do it in RAII fashion, as in:
+1. Call `AddHandler` in the constructor
+2. Store the ID as a member variable
+3. Call `RemoveHandler` in the destructor
 
 # Configuring Delegate
 By default, delegate is completely thread safe (with one slight exception discussed below), and automatically performs appropriate locking on thread sensitive functions.
@@ -50,7 +54,7 @@ By default, delegate is completely thread safe (with one slight exception discus
 However, locking introduces a slight performance hit. If you are in a single threaded environment, and wish to disable multithreaded locking, you can do so
 by defining the `DELEGATE_SINGLETHREADED` macro before including delegate.h.
 
-## Please Note
+## Important
 
 **Delegate::Invoke() does not perform any thread locking by default.**
 
